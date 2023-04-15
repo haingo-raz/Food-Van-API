@@ -1,19 +1,22 @@
-const express = require('express')
-const app = express()
 const dotenv = require('dotenv')
-dotenv.config();
-const bodyParser  = require('body-parser');
+dotenv.config()
+const express = require('express')
 const mongoose = require('mongoose')
 const cors = require("cors")
-var morgan = require('morgan');
+const bodyParser  = require('body-parser');
+//var morgan = require('morgan');
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json())
+const app = express()
+
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json())
 app.use(cors())
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 
+
+//MongoDB schema
 require("./listings")
 const Listings = mongoose.model("Listings")
 
@@ -46,31 +49,20 @@ app.get("/getListings", async(req, res) => {
 })
 
 //add post 
-app.post("/createListings", (req, res) => {
-
-    let jsonData = req.body;
-
-    console.log("Data received " + JSON.stringify(jsonData))
-
+app.post("/create", (req, res) => {
+   
+    res.json({"message": "Server accessed"})
+    console.log(req.body)
     try {
-
-        // console.log(author)
-        // console.log(list_date)
-        // console.log(title)
-        console.log(jsonData.image64)
-        // console.log(list_details)
-
-        // Listings.create({
-        //     author: author, 
-        //     list_date: list_date,
-        //     title: title,
-        //     image: image64,
-        //     list_details: list_details
-        // })
-
-        res.send({Status: "ok"})
+        Listings.create({
+            author: req.body.author,
+            list_date: req.body.list_date, 
+            title: req.body.title,  
+            image: req.body.image64,
+            list_details: req.body.list_details,
+        })
     } catch (error) {
-        console.log(error)
+        res.send(error)
     }
 })
 
