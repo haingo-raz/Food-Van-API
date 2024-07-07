@@ -14,5 +14,3 @@ const ListingsSchema = new mongoose.Schema(
 );
 
 mongoose.model("Listings", ListingsSchema)
-    
-    
